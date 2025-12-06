@@ -1,21 +1,32 @@
-import random
+from logic import determinar_ganador
+from random_gen import jugada_computadora
+from scoreboard import Scoreboard
 
 def jugar():
-    opciones = ["piedra", "papel", "tijera"]
-    usuario = input("Elige piedra, papel o tijera: ").lower()
-    computadora = random.choice(opciones)
+    marcador = Scoreboard()
 
-    print(f"Tú elegiste: {usuario}")
-    print(f"La computadora eligió: {computadora}")
+    while True:
+        usuario = input("Elige piedra, papel o tijera (o 'salir' para terminar): ").lower()
+        if usuario == "salir":
+            print("Juego terminado.")
+            marcador.mostrar()
+            break
 
-    if usuario == computadora:
-        print("¡Empate!")
-    elif (usuario == "piedra" and computadora == "tijera") or \
-         (usuario == "papel" and computadora == "piedra") or \
-         (usuario == "tijera" and computadora == "papel"):
-        print("¡Ganaste!")
-    else:
-        print("Perdiste...")
+        computadora = jugada_computadora()
+        print(f"Tú elegiste: {usuario}")
+        print(f"La computadora eligió: {computadora}")
+
+        resultado = determinar_ganador(usuario, computadora)
+
+        if resultado == "empate":
+            print("¡Empate!")
+        elif resultado == "usuario":
+            print("¡Ganaste!")
+        else:
+            print("Perdiste...")
+
+        marcador.actualizar(resultado)
+        marcador.mostrar()
 
 if __name__ == "__main__":
     jugar()
